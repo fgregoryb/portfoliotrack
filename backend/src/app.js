@@ -1,6 +1,8 @@
 const express = require('express')
 const cors = require('cors')
 const authRoutes = require('./routes/authRoutes')
+const assetRoutes = require('./routes/assetRoutes')
+const transactionRoutes = require('./routes/transactionRoutes')
 
 const app = express()
 
@@ -12,5 +14,7 @@ app.get('/health', (req, res) => {
 })
 
 app.use('/auth', authRoutes)
+app.use('/assets', assetRoutes)
+app.use('/assets/:assetId/transactions', transactionRoutes)
 
 module.exports = app
