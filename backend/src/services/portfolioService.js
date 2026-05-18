@@ -82,4 +82,45 @@ async function getPortfolio(userId) {
   return portfolio.filter(Boolean)
 }
 
-module.exports = { getPortfolio, calculatePosition }
+async function getEvolution(userId) {
+  const assets = await prisma.asset.findMany({
+    where: { userId },
+    include: {
+      transactions: {
+        orderBy: { date: 'asc' }
+      }
+    }
+  })
+
+  const evolutionMap = {}
+
+  for (const asset of assets) {
+    for (const transaction of asset.transactions) {
+      const date = transaction.date.toISOString().split('T')[0]
+      if (!evolutionMap[date]) {
+        evolutionMap[date] = 0
+      }
+      const qty = parseFloat(transaction.quantity)
+      const price = parseFloat(transaction.unitPrice)
+      if (transaction.type === 'buy') {
+        evolutionMap[date] += qty * price
+      } else if (transaction.type === 'sell') {
+        evolutionMap[date] -= qty * price
+      }
+    }
+  }
+
+  const sorted = Object.entries(evolutionMap).sort(([a], [b]) =>
+    a.localeCompare(b)
+  )
+
+  let cumulative = 0
+  const evolution = sorted.map(([date, value]) => {
+    cumulative += value
+    return { date, invested: parseFloat(cumulative.toFixed(2)) }
+  })
+
+  return evolution
+}
+
+module.exports = { getPortfolio, calculatePosition, getEvolution }

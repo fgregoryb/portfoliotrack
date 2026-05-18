@@ -1,6 +1,8 @@
 import { useAuth } from '../context/AuthContext'
 import { usePortfolio } from '../hooks/usePortfolio'
 import PortfolioTable from '../components/PortfolioTable'
+import AllocationChart from '../components/AllocationChart'
+import EvolutionChart from '../components/EvolutionChart'
 
 export default function DashboardPage() {
   const { user, logout } = useAuth()
@@ -23,13 +25,8 @@ export default function DashboardPage() {
           </button>
         </div>
 
-        {loading && (
-          <p className="text-gray-400">Loading portfolio...</p>
-        )}
-
-        {error && (
-          <p className="text-red-400">{error}</p>
-        )}
+        {loading && <p className="text-gray-400">Loading portfolio...</p>}
+        {error && <p className="text-red-400">{error}</p>}
 
         {!loading && !error && portfolio.length === 0 && (
           <p className="text-gray-400">
@@ -38,7 +35,14 @@ export default function DashboardPage() {
         )}
 
         {!loading && !error && portfolio.length > 0 && (
-          <PortfolioTable portfolio={portfolio} />
+          <>
+            <PortfolioTable portfolio={portfolio} />
+
+            <div className="grid grid-cols-2 gap-6 mt-8">
+              <AllocationChart portfolio={portfolio} />
+              <EvolutionChart />
+            </div>
+          </>
         )}
 
       </div>

@@ -7,5 +7,6 @@ const router = Router()
 router.use(authMiddleware)
 
 router.get('/', portfolioController.getPortfolio)
+router.get('/evolution', portfolioController.getEvolution)
 
 module.exports = router

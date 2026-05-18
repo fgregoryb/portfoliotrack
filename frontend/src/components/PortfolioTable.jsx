@@ -20,7 +20,11 @@ export default function PortfolioTable({ portfolio }) {
 
   const totalInvested = portfolio.reduce((sum, p) => sum + p.totalInvested, 0)
   const totalValue = portfolio.reduce((sum, p) => sum + (p.totalValue || 0), 0)
-  const totalReturn = totalValue - totalInvested
+  const quotedInvested = portfolio.reduce(
+    (sum, p) => (p.totalValue !== null ? sum + p.totalInvested : sum),
+    0
+  )
+  const totalReturn = totalValue - quotedInvested
 
   return (
     <div className="w-full">
