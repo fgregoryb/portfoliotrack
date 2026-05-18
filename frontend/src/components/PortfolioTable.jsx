@@ -38,13 +38,10 @@ export default function PortfolioTable({ portfolio }) {
     return value >= 0 ? 'text-green-400' : 'text-red-400'
   }
 
-  const totalInvested = portfolio.reduce((sum, p) => sum + p.totalInvested, 0)
-  const totalValue = portfolio.reduce((sum, p) => sum + (p.totalValue || 0), 0)
-  const quotedInvested = portfolio.reduce(
-    (sum, p) => (p.totalValue !== null ? sum + p.totalInvested : sum),
-    0
-  )
-  const totalReturn = totalValue - quotedInvested
+  const quoted = portfolio.filter((p) => p.totalValue !== null)
+  const totalInvested = quoted.reduce((sum, p) => sum + p.totalInvested, 0)
+  const totalValue = quoted.reduce((sum, p) => sum + p.totalValue, 0)
+  const totalReturn = totalValue - totalInvested
 
   return (
     <div className="w-full">

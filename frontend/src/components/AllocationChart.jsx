@@ -25,13 +25,12 @@ export default function AllocationChart({ portfolio }) {
   const allocationMap = {}
 
   for (const position of portfolio) {
+    if (position.totalValue === null) continue
     const type = position.type
-    const value = position.totalValue || position.totalInvested
-
     if (!allocationMap[type]) {
       allocationMap[type] = 0
     }
-    allocationMap[type] += value
+    allocationMap[type] += position.totalValue
   }
 
   const data = Object.entries(allocationMap).map(([type, value]) => ({
