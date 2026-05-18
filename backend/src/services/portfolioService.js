@@ -51,14 +51,18 @@ async function getPortfolio(userId) {
       let returnPercent = null
       let returnValue = null
 
-      try {
-        const quote = await getQuote(asset.ticker)
-        currentPrice = quote.price
-        totalValue = quantity * currentPrice
-        returnValue = totalValue - totalInvested
-        returnPercent = ((currentPrice - avgPrice) / avgPrice) * 100
-      } catch {
-        // Se a cotação falhar, retorna os dados sem valores de mercado
+      const supportsQuote = asset.type === 'stock' || asset.type === 'fii'
+
+      if (supportsQuote) {
+        try {
+          const quote = await getQuote(asset.ticker)
+          currentPrice = quote.price
+          totalValue = quantity * currentPrice
+          returnValue = totalValue - totalInvested
+          returnPercent = ((currentPrice - avgPrice) / avgPrice) * 100
+        } catch {
+          // Se a cotação falhar, retorna os dados sem valores de mercado
+        }
       }
 
       return {
