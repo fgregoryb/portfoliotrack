@@ -25,7 +25,16 @@ export default function DashboardPage() {
           </button>
         </div>
 
-        {loading && <p className="text-gray-400">Loading portfolio...</p>}
+        {loading && (
+        <div className="animate-pulse space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="bg-gray-900 rounded-xl h-24" />
+            <div className="bg-gray-900 rounded-xl h-24" />
+            <div className="bg-gray-900 rounded-xl h-24" />
+          </div>
+          <div className="bg-gray-900 rounded-xl h-64" />
+        </div>
+        )}
         {error && <p className="text-red-400">{error}</p>}
 
         {!loading && !error && portfolio.length === 0 && (
@@ -38,7 +47,7 @@ export default function DashboardPage() {
           <>
             <PortfolioTable portfolio={portfolio} />
 
-            <div className="grid grid-cols-2 gap-6 mt-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
               <AllocationChart portfolio={portfolio} />
               <EvolutionChart />
             </div>

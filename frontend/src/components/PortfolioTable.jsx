@@ -13,6 +13,26 @@ export default function PortfolioTable({ portfolio }) {
     return `${signal}${value.toFixed(2)}%`
   }
 
+  function getTypeBadge(type) {
+    const styles = {
+      stock: 'bg-blue-500/20 text-blue-400',
+      fii: 'bg-purple-500/20 text-purple-400',
+      crypto: 'bg-yellow-500/20 text-yellow-400',
+      fixed: 'bg-green-500/20 text-green-400'
+    }
+    const labels = {
+      stock: 'Ação',
+      fii: 'FII',
+      crypto: 'Cripto',
+      fixed: 'Renda Fixa'
+    }
+    return (
+      <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${styles[type] || 'bg-gray-500/20 text-gray-400'}`}>
+        {labels[type] || type}
+      </span>
+    )
+}
+
   function getReturnColor(value) {
     if (value === null || value === undefined) return 'text-gray-400'
     return value >= 0 ? 'text-green-400' : 'text-red-400'
@@ -28,7 +48,7 @@ export default function PortfolioTable({ portfolio }) {
 
   return (
     <div className="w-full">
-      <div className="grid grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         <div className="bg-gray-900 rounded-xl p-4">
           <p className="text-gray-400 text-sm mb-1">Total Invested</p>
           <p className="text-white text-xl font-bold">
@@ -49,7 +69,7 @@ export default function PortfolioTable({ portfolio }) {
         </div>
       </div>
 
-      <div className="bg-gray-900 rounded-xl overflow-hidden">
+      <div className="bg-gray-900 rounded-xl overflow-hidden overflow-x-auto">
         <table className="w-full">
           <thead>
             <tr className="border-b border-gray-800">
@@ -68,7 +88,10 @@ export default function PortfolioTable({ portfolio }) {
                 className="border-b border-gray-800 hover:bg-gray-800 transition-colors"
               >
                 <td className="px-6 py-4">
-                  <p className="text-white font-semibold">{position.ticker}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-white font-semibold">{position.ticker}</p>
+                    {getTypeBadge(position.type)}
+                  </div>
                   <p className="text-gray-400 text-sm">{position.name}</p>
                 </td>
                 <td className="text-right text-white px-6 py-4">
